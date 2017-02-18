@@ -3,35 +3,36 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Kontur.GameStats.ControllersCore.Types;
 
 namespace Kontur.GameStats.Controllers
 {
     class ServersController
     {
-        //get
-        public void Info(string endpoin)
+        [HttpGet]
+        public string Info()
         {
-            
+            return "public string Info(string endpoin)";
         }
-        //put
-        public void Info(string endpoin, string data)
+        [HttpPut]
+        public string Info(string endpoin, string data)
         {
-            
+            return "public string Info(string endpoin, string data)";
         }
-        //get
-        public void Matches(string endpoin, DateTime timestamp)
+        [HttpGet]
+        public string Matches(string endpoin, string timestamp)
         {
-
+            return "public string Matches(string endpoin, DateTime timestamp)";
         }
-        //put
-        public void Matches(string endpoin, DateTime timestamp, string data)
+        [HttpPut]
+        public string Matches(string endpoin, string timestamp, string data)
         {
-
+            return "public string Matches(string endpoin, DateTime timestamp, string data)";
         }
-        //only get
-        public void Stats(string endpoint)
+        [HttpGet]
+        public string Stats(string endpoint)
         {
-
+            return "public string Stats(string endpoint)";
         }
 
     }

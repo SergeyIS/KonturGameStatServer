@@ -3,9 +3,10 @@ using System.IO;
 using System.Net;
 using System.Threading;
 using System.Threading.Tasks;
-using System.Text.RegularExpressions;
 using System.Reflection;
 using System.Collections.Generic;
+using System.Xml;
+using Kontur.GameStats.ControllersCore.Types;
 
 namespace Kontur.GameStats.Server
 {
@@ -15,7 +16,6 @@ namespace Kontur.GameStats.Server
         {
             listener = new HttpListener();
         }
-        
         public void Start(string prefix)
         {
             lock (listener)
@@ -37,7 +37,6 @@ namespace Kontur.GameStats.Server
                 }
             }
         }
-
         public void Stop()
         {
             lock (listener)
@@ -53,7 +52,6 @@ namespace Kontur.GameStats.Server
                 isRunning = false;
             }
         }
-
         public void Dispose()
         {
             if (disposed)
@@ -65,7 +63,6 @@ namespace Kontur.GameStats.Server
 
             listener.Close();
         }
-        
         private void Listen()
         {
             while (true)
@@ -90,65 +87,10 @@ namespace Kontur.GameStats.Server
                 }
             }
         }
-
         private async Task HandleContextAsync(HttpListenerContext listenerContext)
         {
-            // TODO: implement request handling
-            //Dictionary<string, MemberInfo[]> dictionary = new Dictionary<string, MemberInfo[]>();
-            //dictionary.Add(
-            //    @"/servers/info", Type.GetType("Kontur.GameStats.Controllers.ServersController").FindMembers(
-            //        MemberTypes.Method, BindingFlags.Public | BindingFlags.Instance, (m, n) => m.Name.Equals(n), "Info"));
-            //dictionary.Add(
-            //    @"/servers/[a-zA-Z0-9_]+/info", Type.GetType("Kontur.GameStats.Controllers.ServersController").FindMembers(
-            //        MemberTypes.Method, BindingFlags.Public | BindingFlags.Instance, (m, n) => m.Name.Equals(n), "Info"));
-            //dictionary.Add(
-            //    @"/servers/[a-zA-Z0-9_]+/matches/[1-9]\d\d\d-[0-1]\d-\d\dT\d\d:\d\d:\d\dZ",
-            //    Type.GetType("Kontur.GameStats.Controllers.ServersController").FindMembers(
-            //        MemberTypes.Method, BindingFlags.Public | BindingFlags.Instance, (m, n) => m.Name.Equals(n), "Matches"));
-            //dictionary.Add(
-            //    @"/servers/[a-zA-Z0-9_]+/stats", Type.GetType("Kontur.GameStats.Controllers.ServersController").FindMembers(
-            //        MemberTypes.Method, BindingFlags.Public | BindingFlags.Instance, (m, n) => m.Name.Equals(n), "Stats"));
-            //dictionary.Add(
-            //    @"/players/[a-zA-Z0-9_]+/stats", Type.GetType("Kontur.GameStats.Controllers.PlayersController").FindMembers(
-            //        MemberTypes.Method, BindingFlags.Public | BindingFlags.Instance, (m, n) => m.Name.Equals(n), "Stats"));
-            //dictionary.Add(
-            //    @"/reports/recent-matches/\d+", Type.GetType("Kontur.GameStats.Controllers.ReportsController").FindMembers(
-            //        MemberTypes.Method, BindingFlags.Public | BindingFlags.Instance, (m, n) => m.Name.Equals(n), "RecentMatches"));
-            //dictionary.Add(
-            //    @"/reports/best-players/\d+", Type.GetType("Kontur.GameStats.Controllers.ReportsController").FindMembers(
-            //        MemberTypes.Method, BindingFlags.Public | BindingFlags.Instance, (m, n) => m.Name.Equals(n), "BestPlayers"));
-            //dictionary.Add(
-            //    @"/reports/popular-servers/\d+", Type.GetType("Kontur.GameStats.Controllers.ReportsController").FindMembers(
-            //        MemberTypes.Method, BindingFlags.Public | BindingFlags.Instance, (m, n) => m.Name.Equals(n), "PopularServers"));
-
-            string request = listenerContext.Request.Url.AbsolutePath;
-            string httpmethod = listenerContext.Request.HttpMethod;
-
-            ControllersCore.Types.RequestMap mapobj = new ControllersCore.Types.RequestMap(@"/{controller:servers}/{param:[a-zA-Z0-9_]+}/{method:matches}/{param:[a-zA-Z0-9_]+}");
-            bool val = mapobj.ExecuteMapping(request);
-
-
-
-            listenerContext.Response.StatusCode = (int)HttpStatusCode.OK;
-            using (var writer = new StreamWriter(listenerContext.Response.OutputStream))
-                writer.WriteLine("Hello, world!");
-
-        }
-
-        private static bool DelegateToSearchCriteria(MemberInfo objMemberInfo, Object objSearch)
-        {
-            // Compare the name of the member function with the filter criteria.
-            if (objMemberInfo.Name.ToString() == objSearch.ToString())
-            {
-                Console.WriteLine("true");
-                return true;
-            }
-            else
-            {
-                Console.WriteLine("false");
-                return false;
-            }
-
+            RequestHandler handler = new RequestHandler(listenerContext);
+            handler.Execute();
         }
 
         private readonly HttpListener listener;

@@ -6,8 +6,9 @@ using System.Threading.Tasks;
 using System.Reflection;
 using System.Text.RegularExpressions;
 
-namespace Kontur.GameStats.ControllersCore.Attributes
+namespace Kontur.GameStats.ControllersCore.Types
 {
+    enum HttpMethods { GET, PUT, POST, DELETE };
     class NameAttribute : Attribute
     {
         private string name;
@@ -20,28 +21,27 @@ namespace Kontur.GameStats.ControllersCore.Attributes
     }
     class HttpGetAttribute : Attribute
     {
-        
+
     }
     class HttpPostAttribute : Attribute
     {
 
-    } 
-}
-namespace Kontur.GameStats.ControllersCore.Types
-{
-    enum HttpMethods { GET, PUT, POST, DELETE };
+    }
+    class HttpPutAttribute : Attribute
+    {
 
+    }
     class RequestMap
     {
 
         private string pattern;
-        private Type controller;
-        private MethodInfo method;
+        private string controllername;
+        private string methodname;
         private List<object> param;
         public string Pattern { get { return (pattern!=null) ? pattern : null; } }
-        public Type Controller { get { return (controller != null) ? controller : null; } }
-        public MethodInfo Method { get { return (method != null) ? method : null; } }
-        public List<object> Param { get { return (param.Count > 0) ? param : null; } }
+        public string Controller { get { return (controllername != null) ? controllername : null; } }
+        public string Method { get { return (methodname != null) ? methodname : null; } }
+        public List<object> Param { get { return param; } }
         public RequestMap(string pattern)
         {
             this.pattern = pattern;
@@ -50,50 +50,41 @@ namespace Kontur.GameStats.ControllersCore.Types
 
         public bool ExecuteMapping(string reqstr)
         {
-            //pattern: /{controller:servers}/{param:}/{method:info}
             if (pattern == "") return false;
+            pattern.Trim('/');
             reqstr = reqstr.Replace(" ", "");
             reqstr = reqstr.Trim('/');
             var partsreq = reqstr.Split('/');
 
-            pattern = pattern.Replace("/", "");
+            Regex convreg = ConvertPattern();
+            if (!convreg.IsMatch(reqstr)) return false;
+
+            pattern = pattern.Replace("/","");
 
             string buff = String.Empty;
             int partreqindex = 0;
-            string controllername;
-            string methodname;
-
             for (int i = 0; i < pattern.Length; i++)
             {
-                if(pattern[i] == '{')
+                if (pattern[i] == '{')
                 {
                     buff = String.Empty;
                 }
-                else if(pattern[i] == '}')
+                else if (pattern[i] == '}')
                 {
                     var values = buff.Split(':');
-                    Regex regexp = new Regex(values[1]);
-                    Match match = regexp.Match(partsreq[partreqindex]);
-                    if (match.Success)
+                    if (values[0] == "controller")
                     {
-                        if(values[0] == "controller")
-                        {
-                            controllername = partsreq[partreqindex];
-                        }
-                        else if(values[0] == "method")
-                        {
-                            methodname = partsreq[partreqindex];
-                        }
-                        else
-                        {
-                            param.Add(partsreq[partreqindex]);
-                        }
-                        partreqindex++;
+                        controllername = partsreq[partreqindex];
+                    }
+                    else if (values[0] == "method")
+                    {
+                        methodname = partsreq[partreqindex].Replace("-","");
                     }
                     else
                     {
-                        return false;
+                        param.Add(partsreq[partreqindex]);
                     }
+                    partreqindex++;
                 }
                 else
                 {
@@ -102,13 +93,18 @@ namespace Kontur.GameStats.ControllersCore.Types
             }
             return true;
         }
-    }
-    class MapPattern
-    {
-        
-        public MapPattern(string pattern)
-        {
 
+        private Regex ConvertPattern()
+        {
+            string regpat = pattern;
+            regpat = regpat.Replace(" ", "");
+            regpat = regpat.Replace("{", "");
+            regpat = regpat.Replace("}", "");
+            regpat = regpat.Replace("controller:", "");
+            regpat = regpat.Replace("param:", "");
+            regpat = regpat.Replace("method:", "");
+            regpat = regpat.Trim('/');
+            return new Regex(regpat);
         }
     }
 }

@@ -3,29 +3,28 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using Kontur.GameStats.ControllersCore.Attributes;
 using Kontur.GameStats.ControllersCore.Types;
 
 namespace Kontur.GameStats.Controllers
 {
     class ReportsController
     {
-       
-        public void RecentMatches(int count)
+       [HttpGet]
+        public string RecentMatches(string count)
         {
-
+            return "public string RecentMatches(int count)";
         }
 
-        
-        public void BestPlayers(int count)
+        [HttpGet]
+        public string BestPlayers(string count)
         {
-
+            return "public string BestPlayers(int count)";
         }
 
-        
-        public void PopularServers(int count)
+        [HttpGet]
+        public string PopularServers(string count)
         {
-
+            return "public string PopularServers(int count)";
         }
     }
 }

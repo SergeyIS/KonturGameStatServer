@@ -1,0 +1,11 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<routesconfig>
+  <route name="/servers/endpoint/info" pattern="/{controller:servers}/{param:[a-zA-Z0-9_]+}/{method:info}"></route>
+  <route name="/servers/endpoint/matches/timestamp" pattern="/{controller:servers}/{param:[a-zA-Z0-9_]+}/{method:matches}/{param:[a-zA-Z0-9_]+}"></route>
+  <route name="/servers/info" pattern="/{controller:servers}/{method:info}"></route>
+  <route name="/servers/endpoint/stats" pattern="/{controller:servers}/{param:[a-zA-Z0-9_]+}/{method:stats}"></route>
+  <route name="/players/name/stats" pattern="/{controller:players}/{param:[a-zA-Z0-9_]+}/{method:stats}"></route>
+  <route name="/reports/recent-matches/count" pattern ="/{controller:reports}/{method:recentmatches}/{param:[0-9]*}"></route>
+  <route name="/reports/best-players/count" pattern ="/{controller:reports}/{method:bestplayers}/{param:[0-9]*}"></route>
+  <route name="/reports/popular-servers/count" pattern ="/{controller:reports}/{method:popularservers}/{param:[0-9]*}"></route>
+</routesconfig>
