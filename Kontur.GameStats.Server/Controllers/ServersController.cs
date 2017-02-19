@@ -12,7 +12,7 @@ namespace Kontur.GameStats.Controllers
         [HttpGet]
         public string Info()
         {
-            return "public string Info(string endpoin)";
+            return "public string Info()";
         }
         [HttpPut]
         public string Info(string endpoin, string data)

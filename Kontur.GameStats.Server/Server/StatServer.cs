@@ -83,7 +83,7 @@ namespace Kontur.GameStats.Server
                 }
                 catch (Exception error)
                 {
-                    // TODO: log errors
+                    Log.Write(error);
                 }
             }
         }

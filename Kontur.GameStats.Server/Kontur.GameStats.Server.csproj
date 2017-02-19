@@ -49,6 +49,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="ControllersCore\ControllersCore.cs" />
+    <Compile Include="ControllersCore\Logging.cs" />
     <Compile Include="ControllersCore\RequestHandler.cs" />
     <Compile Include="Controllers\ServersController.cs" />
     <Compile Include="Controllers\PlayersController.cs" />
@@ -63,9 +64,6 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Models\" />
-  </ItemGroup>
-  <ItemGroup>
-    <Content Include="routes.xml" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

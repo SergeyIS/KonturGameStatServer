@@ -6,6 +6,7 @@ using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
 using System.IO;
+using System.Runtime.Serialization.Json;
 
 namespace Kontur.GameStats.ControllersCore.Types
 {
@@ -26,7 +27,7 @@ namespace Kontur.GameStats.ControllersCore.Types
             /*
              Регистрация маршрутов. Маршрут представляет собой строку вида: 
              "/{controller:name}/{param:regular_expression}/{method:name}". 
-             Такой маршрут сопоставляется с http запросом, при учитывается последовательность 
+             Такой маршрут сопоставляется с http запросом, при этом учитывается последовательность 
              указания элементов {key:value}; 
              */
 
@@ -50,11 +51,7 @@ namespace Kontur.GameStats.ControllersCore.Types
         /// </summary>
         public void Execute()
         {
-            if (!Mapping()) //Не найден метод контроллера.(Получены значения contrtype и exemethod).
-            {
-                WriteResponse("Не найден метод контроллера");
-                return;
-            }
+            if (!Mapping()) { context.Response.StatusCode = (int)HttpStatusCode.BadGateway; context.Response.Close(); return; } //Не найден метод контроллера.(Получены значения contrtype и exemethod).
 
             object obj = contrtype.GetConstructor(new Type[0]).Invoke(null);
             object result = null;
@@ -69,13 +66,17 @@ namespace Kontur.GameStats.ControllersCore.Types
                 result = exemethod.Invoke(obj, requestmap.Param.ToArray());
 
                 if(result != null)
-                    WriteResponse(result.ToString());
+                    WriteResponse(result);
 
             }
-            catch(Exception e)
+            catch(Exception e)//Метод найден, но не соответствует число параметров.
             {
-                Console.WriteLine(e.Message);
-            } 
+                context.Response.StatusCode = (int)HttpStatusCode.BadGateway;
+            }
+            finally
+            {
+                context.Response.Close();
+            }
         }
 
         /// <summary>
@@ -123,13 +124,36 @@ namespace Kontur.GameStats.ControllersCore.Types
         /// <summary>
         /// Записывет сообщение в выходной поток.
         /// </summary>
-        private void WriteResponse(string resp)
+        private void WriteResponse(object resp)
         {
-            using (var output = context.Response.OutputStream)
+            try
             {
-                byte[] bytes = Encoding.UTF8.GetBytes(resp);
-                output.Write(bytes, 0, bytes.Length);
+                if (resp is HttpStatusCode)//был ли передан статус код.
+                {
+                    context.Response.StatusCode = (int)resp;
+                    return;
+                }
+                else if (resp is string)
+                {
+                    using (var output = context.Response.OutputStream)
+                    {
+                        byte[] bytes = Encoding.UTF8.GetBytes(resp.ToString());
+                        output.Write(bytes, 0, bytes.Length);
+                    }
+                }
+                else
+                {
+                    //выполнить сериализацию, и записать ее в result
+                    DataContractJsonSerializer jresp = new DataContractJsonSerializer(resp.GetType());
+                    jresp.WriteObject(context.Response.OutputStream, resp);
+                }
             }
+            catch(Exception ex)
+            {
+                Log.Write(ex);
+                context.Response.StatusCode = (int)HttpStatusCode.InternalServerError;
+            }
+            
         }
         
         private string ReadRequestBody()
