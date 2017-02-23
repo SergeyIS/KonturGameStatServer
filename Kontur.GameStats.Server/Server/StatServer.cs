@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 using System.Reflection;
 using System.Collections.Generic;
 using System.Xml;
-using Kontur.GameStats.ControllersCore.Types;
+using Kontur.GameStats.Application.Core;
 
 namespace Kontur.GameStats.Server
 {
@@ -83,7 +83,7 @@ namespace Kontur.GameStats.Server
                 }
                 catch (Exception error)
                 {
-                    Log.Write(error);
+                    //Log.Write(error);
                 }
             }
         }

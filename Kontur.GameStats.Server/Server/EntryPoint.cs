@@ -32,7 +32,7 @@ namespace Kontur.GameStats.Server
             {
                 server.Start(options.Prefix);
 
-                ControllersCore.Types.RequestHandler.RegisterRoutes();//Регистрация маршрутов
+               Application.Core.RequestHandler.RegisterRoutes();//Регистрация маршрутов
 
                 Console.ReadKey(true);
             }

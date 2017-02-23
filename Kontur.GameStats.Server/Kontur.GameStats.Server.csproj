@@ -33,27 +33,23 @@
     <StartupObject />
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="FluentCommandLineParser, Version=1.4.3.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\FluentCommandLineParser.1.4.3\lib\net35\FluentCommandLineParser.dll</HintPath>
-      <Private>True</Private>
+    <Reference Include="FluentCommandLineParser">
+      <HintPath>..\FluentCommandLineParser.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
-    <Reference Include="System.Runtime.Serialization" />
-    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Net.Http.Formatting, Version=4.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.AspNet.WebApi.Client.4.0.20710.0\lib\net40\System.Net.Http.Formatting.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="System.Net.Http.WebRequest" />
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="System.Data" />
     <Reference Include="System.Net.Http" />
-    <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="ControllersCore\ControllersCore.cs" />
-    <Compile Include="ControllersCore\Logging.cs" />
-    <Compile Include="ControllersCore\RequestHandler.cs" />
-    <Compile Include="Controllers\ServersController.cs" />
-    <Compile Include="Controllers\PlayersController.cs" />
-    <Compile Include="Controllers\ReportsController.cs" />
+    <Compile Include="Server\Logging.cs" />
     <Compile Include="Server\StatServer.cs" />
     <Compile Include="Server\EntryPoint.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -63,7 +59,10 @@
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="Models\" />
+    <ProjectReference Include="..\Kontur.GameStats.Application\Kontur.GameStats.Application.csproj">
+      <Project>{a55fdaa1-e83f-48fe-84c2-1656706dac25}</Project>
+      <Name>Kontur.GameStats.Application</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
