@@ -73,7 +73,6 @@ namespace Kontur.GameStats.Server
                     {
                         var context = listener.GetContext();
                         Task.Run(() => HandleContextAsync(context));
-
                     }
                     else Thread.Sleep(0);
                 }
@@ -83,7 +82,7 @@ namespace Kontur.GameStats.Server
                 }
                 catch (Exception error)
                 {
-                    //Log.Write(error);
+                    Log.WriteLog(error);
                 }
             }
         }
