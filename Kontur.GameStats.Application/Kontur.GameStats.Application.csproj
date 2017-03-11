@@ -86,6 +86,7 @@
     <Compile Include="Controllers\ReportsController.cs" />
     <Compile Include="Controllers\ServersController.cs" />
     <Compile Include="Controllers\BaseController.cs" />
+    <Compile Include="Models\ServersModels\ServerMatchesModel.cs" />
     <Compile Include="Models\ServersModels\ServersInfoModel.cs" />
     <Compile Include="Models\ServersModels\ServerInfoModel.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

@@ -76,9 +76,8 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Server\Logging.cs" />
-    <Compile Include="Server\StatServer.cs" />
-    <Compile Include="Server\EntryPoint.cs" />
+    <Compile Include="StatServer.cs" />
+    <Compile Include="EntryPoint.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -91,6 +90,10 @@
     <ProjectReference Include="..\Kontur.GameStats.Application\Kontur.GameStats.Application.csproj">
       <Project>{a55fdaa1-e83f-48fe-84c2-1656706dac25}</Project>
       <Name>Kontur.GameStats.Application</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Kontur.GameStats.Logger\Kontur.GameStats.Logger.csproj">
+      <Project>{8e7ebbcd-9fc6-4a32-9083-4047a0846b56}</Project>
+      <Name>Kontur.GameStats.Logger</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>

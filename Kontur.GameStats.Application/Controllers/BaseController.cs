@@ -10,7 +10,7 @@ namespace Kontur.GameStats.Application.Controllers
 {
     class BaseController
     {
-        protected App_Data.ConturDataModel ConturDbContext = new App_Data.ConturDataModel();
+        protected App_Data.ConturDataModel dbcontext = new App_Data.ConturDataModel();
    
     }
 }

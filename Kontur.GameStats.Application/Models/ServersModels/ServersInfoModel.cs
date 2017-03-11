@@ -10,10 +10,10 @@ namespace Kontur.GameStats.Application.Models
     [DataContract]
     class ServerInfoModel
     {
-        [DataMember]
-        public string name { get; set; }
+        [DataMember(Name = "name")]
+        public string Name { get; set; }
 
-        [DataMember]
-        public List<string> gameModes { get; set; }
+        [DataMember(Name = "gameModes")]
+        public List<string> GameModes { get; set; }
     }
 }

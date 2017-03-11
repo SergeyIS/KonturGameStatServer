@@ -22,11 +22,11 @@ namespace Kontur.GameStats.Application.App_Data
 
         public DateTime timestamp { get; set; }
 
-        public int? fraglimit { get; set; }
+        public int fraglimit { get; set; }
 
-        public int? timelimit { get; set; }
+        public int timelimit { get; set; }
 
-        public int? timeelapsed { get; set; }
+        public double timeelapsed { get; set; }
 
         [Required]
         [StringLength(10)]
