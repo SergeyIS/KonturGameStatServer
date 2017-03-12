@@ -11,6 +11,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Kontur.GameStats.Logger", "
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Kontur.GameStats.Data", "Kontur.GameStats.Data\Kontur.GameStats.Data.csproj", "{0E0C5B59-B19B-483C-AE03-5E96B230F846}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Kontur.GameStats.SharedResources", "Kontur.GameStats.SharedResources\Kontur.GameStats.SharedResources.csproj", "{8B55556A-969C-41FB-965A-B73010F8E0B6}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -33,6 +35,10 @@ Global
 		{0E0C5B59-B19B-483C-AE03-5E96B230F846}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{0E0C5B59-B19B-483C-AE03-5E96B230F846}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{0E0C5B59-B19B-483C-AE03-5E96B230F846}.Release|Any CPU.Build.0 = Release|Any CPU
+		{8B55556A-969C-41FB-965A-B73010F8E0B6}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{8B55556A-969C-41FB-965A-B73010F8E0B6}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{8B55556A-969C-41FB-965A-B73010F8E0B6}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{8B55556A-969C-41FB-965A-B73010F8E0B6}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

@@ -45,14 +45,7 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="EntityFramework, Version=6.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">
-      <HintPath>..\packages\EntityFramework.6.1.3\lib\net45\EntityFramework.dll</HintPath>
-      <Private>True</Private>
-    </Reference>
-    <Reference Include="EntityFramework.SqlServer, Version=6.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">
-      <HintPath>..\packages\EntityFramework.6.1.3\lib\net45\EntityFramework.SqlServer.dll</HintPath>
-      <Private>True</Private>
-    </Reference>
+    <Reference Include="EntityFramework, Version=6.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" />
     <Reference Include="System" />
     <Reference Include="System.ComponentModel.DataAnnotations" />
     <Reference Include="System.Core" />
@@ -66,44 +59,15 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="App_Data\ConturDataModel.cs" />
-    <Compile Include="App_Data\Matches.cs" />
-    <Compile Include="App_Data\MatchesPlayers.cs" />
-    <Compile Include="App_Data\Players.cs" />
-    <Compile Include="App_Data\PlayerStat.cs" />
-    <Compile Include="App_Data\PlayerStatGameMaps.cs" />
-    <Compile Include="App_Data\PlayerStatGameModes.cs" />
-    <Compile Include="App_Data\PlayerStatServers.cs" />
-    <Compile Include="App_Data\ServerGameModes.cs" />
-    <Compile Include="App_Data\Servers.cs" />
-    <Compile Include="App_Data\ServerStatGameMaps.cs" />
-    <Compile Include="App_Data\ServerStatGameModes.cs" />
-    <Compile Include="App_Data\ServerStats.cs" />
-    <Compile Include="App_Data\sysdiagrams.cs" />
     <Compile Include="ControllersCore\ControllersCore.cs" />
     <Compile Include="ControllersCore\RequestHandler.cs" />
     <Compile Include="Controllers\PlayersController.cs" />
     <Compile Include="Controllers\ReportsController.cs" />
     <Compile Include="Controllers\ServersController.cs" />
     <Compile Include="Controllers\BaseController.cs" />
-    <Compile Include="Models\ServersModels\ServerMatchesModel.cs" />
-    <Compile Include="Models\ServersModels\ServersInfoModel.cs" />
-    <Compile Include="Models\ServersModels\ServerInfoModel.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Models\PlayersModels\" />
-    <Folder Include="Models\ReportsModels\" />
-  </ItemGroup>
-  <ItemGroup>
-    <Content Include="App_Data\ConturDataBase.mdf">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
-    <Content Include="App_Data\ConturDataBase_log.ldf">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-      <DependentUpon>ConturDataBase.mdf</DependentUpon>
-    </Content>
-  </ItemGroup>
+  <ItemGroup />
   <ItemGroup>
     <BootstrapperPackage Include=".NETFramework,Version=v4.5.2">
       <Visible>False</Visible>
@@ -121,7 +85,16 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="App.Config" />
-    <None Include="packages.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Kontur.GameStats.Data\Kontur.GameStats.Data.csproj">
+      <Project>{0e0c5b59-b19b-483c-ae03-5e96b230f846}</Project>
+      <Name>Kontur.GameStats.Data</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Kontur.GameStats.SharedResources\Kontur.GameStats.SharedResources.csproj">
+      <Project>{8b55556a-969c-41fb-965a-b73010f8e0b6}</Project>
+      <Name>Kontur.GameStats.SharedResources</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
