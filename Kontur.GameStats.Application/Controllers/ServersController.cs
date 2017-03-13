@@ -33,8 +33,8 @@ namespace Kontur.GameStats.Application.Controllers
             ServerInfoModel serverInfo = new ServerInfoModel();
             using(var dbmanager = new DataManager())
             {
-                var isSuccessful = dbmanager.GetServerInfo(endpoint, serverInfo);
-                if (!isSuccessful)
+                serverInfo = dbmanager.GetServerInfo(endpoint);
+                if (dbmanager.StateOfCurrentOperation == OperationState.Failed)
                     return HttpStatusCode.BadRequest;
             }
             return serverInfo;
@@ -55,9 +55,16 @@ namespace Kontur.GameStats.Application.Controllers
 
         [Method(HttpMethods.GET)]
         [Name("matches")]
-        public string Matches(string endpoint, DateTime timestamp)
+        public object Matches(string endpoint, DateTime timestamp)
         {
-            return "public string Matches(string endpoin, DateTime timestamp)";
+            using(var dbmanager = new DataManager())
+            {
+                dbmanager.OpenConnetion();
+                var matchinfo = dbmanager.GetMatchInfo(endpoint, timestamp);
+                if (dbmanager.StateOfCurrentOperation == OperationState.Failed)
+                    return HttpStatusCode.NotFound;
+                return matchinfo;
+            }
         }
 
         [Method(HttpMethods.PUT)]
@@ -67,20 +74,29 @@ namespace Kontur.GameStats.Application.Controllers
             using(var dbmanager = new DataManager())
             {
                 dbmanager.OpenConnetion();
-                var isSuccessful = dbmanager.AddMatch(endpoint, timestamp, data);
+                dbmanager.AddMatch(endpoint, timestamp, data);
 
-                if (isSuccessful)
-                    return HttpStatusCode.OK;
+                if (dbmanager.StateOfCurrentOperation == OperationState.Failed)
+                    return HttpStatusCode.BadRequest;
 
-                return HttpStatusCode.BadRequest;
+                return HttpStatusCode.OK;
             }     
         }
 
         [Method(HttpMethods.GET)]
         [Name("stats")]
-        public string Stats(string endpoint)
+        public object Stats(string endpoint)
         {
-            return "public string Stats(string endpoint)";
+            var serverStats = new ServerStatsModel();
+
+            using(var dbmanager = new DataManager())
+            {
+                dbmanager.OpenConnetion();
+                serverStats = dbmanager.GetServerStat(endpoint);
+                if (dbmanager.StateOfCurrentOperation == OperationState.Failed)
+                    return HttpStatusCode.NotFound;
+            }
+            return serverStats;
         }
 
     }
