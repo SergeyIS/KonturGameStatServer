@@ -79,11 +79,11 @@ namespace Kontur.GameStats.Application.Controllers
                 if (dbmanager.StateOfCurrentOperation == OperationState.Failed)
                     return HttpStatusCode.BadRequest;
 
-                dbmanager.UpdateServersStats(endpoint);//Обновляет статистические данные о сервере из глобальной таблицы.
-                dbmanager.UpdatePlayersStats(endpoint, data);//Обновляет статистические данные об игроке из глобальной таблицы
+                dbmanager.UpdateServersGlobalStats(endpoint);//Обновляет статистические данные о сервере из глобальной таблицы.
+                dbmanager.UpdatePlayersGlobalStats(endpoint, data);//Обновляет статистические данные об игроке из глобальной таблицы
 
-                dbmanager.UpdateServerMatchesStats(endpoint, data);//Обновляет статистические данные о сервере (режимы игры, карты)
-                dbmanager.UpdatePlayersMatchesStats(endpoint, data);//Обновляет статистические данные об игроке (режим игры, сервер, итд)
+                dbmanager.UpdateServerLocalStats(endpoint, data);//Обновляет статистические данные о сервере (режимы игры, карты)
+                dbmanager.UpdatePlayersLocalStats(endpoint, data);//Обновляет статистические данные об игроке (режим игры, сервер, итд)
 
                 return HttpStatusCode.OK;
             }     
