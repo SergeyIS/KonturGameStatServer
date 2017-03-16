@@ -91,6 +91,10 @@
       <Project>{0e0c5b59-b19b-483c-ae03-5e96b230f846}</Project>
       <Name>Kontur.GameStats.Data</Name>
     </ProjectReference>
+    <ProjectReference Include="..\Kontur.GameStats.Logger\Kontur.GameStats.Logger.csproj">
+      <Project>{8e7ebbcd-9fc6-4a32-9083-4047a0846b56}</Project>
+      <Name>Kontur.GameStats.Logger</Name>
+    </ProjectReference>
     <ProjectReference Include="..\Kontur.GameStats.SharedResources\Kontur.GameStats.SharedResources.csproj">
       <Project>{8b55556a-969c-41fb-965a-b73010f8e0b6}</Project>
       <Name>Kontur.GameStats.SharedResources</Name>

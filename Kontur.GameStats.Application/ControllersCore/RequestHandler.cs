@@ -103,6 +103,9 @@ namespace Kontur.GameStats.Application.Core
                             mswrriter.Write(bytes, 0, bytes.Length);
                             mswrriter.Position = 0;
                             order_param[i] = jresp.ReadObject(mswrriter);
+                            //
+
+                        //
                         }
                     }
                 }
@@ -113,7 +116,7 @@ namespace Kontur.GameStats.Application.Core
             catch(Exception e)
             {
                 context.Response.StatusCode = (int)HttpStatusCode.BadGateway;
-                Console.Write(e.Message);
+                Logger.Log.WriteErrorLog(e);
             }
             finally
             {
