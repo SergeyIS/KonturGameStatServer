@@ -73,17 +73,17 @@ namespace Kontur.GameStats.Application.Controllers
         {
             using(var dbmanager = new DataManager())
             {
-                dbmanager.OpenConnetion();
-                dbmanager.AddMatch(endpoint, timestamp, data);
+                //dbmanager.OpenConnetion();
+                //dbmanager.AddMatch(endpoint, timestamp, data);
 
-                if (dbmanager.StateOfCurrentOperation == OperationState.Failed)
-                    return HttpStatusCode.BadRequest;
+                //if (dbmanager.StateOfCurrentOperation == OperationState.Failed)
+                //    return HttpStatusCode.BadRequest;
 
-                //Протестировано//dbmanager.UpdateServersStats(endpoint);//Обновляет статистические данные о сервере из глобальной таблицы.
+                dbmanager.UpdateServersStats(endpoint);//Обновляет статистические данные о сервере из глобальной таблицы.
                 dbmanager.UpdatePlayersStats(endpoint, data);//Обновляет статистические данные об игроке из глобальной таблицы
 
-                //Протестировано//dbmanager.UpdateServerMatchesStats(endpoint, data);//Обновляет статистические данные о сервере (режимы игры, карты)
-                //Протестировано//dbmanager.UpdatePlayersMatchesStats(endpoint, data);//Обновляет статистические данные об игроке (режим игры, сервер, итд)
+                //dbmanager.UpdateServerMatchesStats(endpoint, data);//Обновляет статистические данные о сервере (режимы игры, карты)
+                //dbmanager.UpdatePlayersMatchesStats(endpoint, data);//Обновляет статистические данные об игроке (режим игры, сервер, итд)
 
                 return HttpStatusCode.OK;
             }     
