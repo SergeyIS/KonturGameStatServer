@@ -10,6 +10,6 @@ namespace Kontur.GameStats.Application.Controllers
 {
     class BaseController
     {
-  
+        
     }
 }

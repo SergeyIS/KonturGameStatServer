@@ -17,7 +17,7 @@ namespace Kontur.GameStats.Application.Controllers
 
             if (count <= 0)
             {
-                count = 5;
+                return new object[0];
             }
             else if (count > 50)
             {
@@ -29,7 +29,7 @@ namespace Kontur.GameStats.Application.Controllers
                 resentMatches = dbmanager.GetRecentMatches(count);
                 if(dbmanager.StateOfCurrentOperation == OperationState.Failed)
                 {
-                    return HttpStatusCode.BadRequest;
+                    return HttpStatusCode.NotFound;
                 }
             }
             return resentMatches;
@@ -43,7 +43,7 @@ namespace Kontur.GameStats.Application.Controllers
             var bestPlayers = new List<BestPlayersModel>();
             if(count <= 0)
             {
-                count = 5;
+                return new object[0];
             }
             else if (count > 50)
             {
@@ -54,7 +54,7 @@ namespace Kontur.GameStats.Application.Controllers
             {
                 bestPlayers = dbmanager.GetBestPlayers(count);
                 if (dbmanager.StateOfCurrentOperation == OperationState.Failed)
-                    return HttpStatusCode.BadRequest;
+                    return HttpStatusCode.NotFound;
             }
             return bestPlayers;
         }
@@ -68,7 +68,7 @@ namespace Kontur.GameStats.Application.Controllers
 
             if (count <= 0)
             {
-                count = 5;
+                return new object[0];
             }
             else if (count > 50)
             {
@@ -79,7 +79,7 @@ namespace Kontur.GameStats.Application.Controllers
             {
                 popularServers = dbmanager.GetPopularServers(count);
                 if (dbmanager.StateOfCurrentOperation == OperationState.Failed)
-                    return HttpStatusCode.BadRequest;
+                    return HttpStatusCode.NotFound;
             }
             return popularServers;
         }
@@ -93,21 +93,21 @@ namespace Kontur.GameStats.Application.Controllers
         */
 
         [Method(HttpMethods.GET)][Name("popular-servers")]
-        public void PopularServers()
+        public object PopularServers()
         {
-            this.PopularServers(5);
+            return this.PopularServers(5);
         }
 
         [Method(HttpMethods.GET)][Name("best-players")]
-        public void BestPlayers()
+        public object BestPlayers()
         {
-            this.BestPlayers(5);
+            return this.BestPlayers(5);
         }
 
         [Method(HttpMethods.GET)][Name("recent-matches")]
-        public void RecentMatches()
+        public object RecentMatches()
         {
-            this.RecentMatches(5);
+            return this.RecentMatches(5);
         }
     }
 }

@@ -24,7 +24,7 @@ namespace Kontur.GameStats.Application.Controllers
                 playerStats = dbmanager.GetPlayerStats(name);
 
                 if (dbmanager.StateOfCurrentOperation == OperationState.Failed)
-                    return HttpStatusCode.BadRequest;
+                    return HttpStatusCode.NotFound;
             }
 
             return playerStats;

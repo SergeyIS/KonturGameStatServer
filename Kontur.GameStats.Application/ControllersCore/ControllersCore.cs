@@ -26,19 +26,18 @@ namespace Kontur.GameStats.Application.Core
     }
     class RequestMap
     {
+        public string Pattern { get; private set; }//Шаблон маршрута
+        public string[] PatternCollecton { get; private set; }//Коллекция элементов "key:value"
+        public string[] RequestCollection { get; private set; }//Коллекция элементов "request-part"
+        public string ControllerName { get; private set; }//Имя контроллера
+        public string MethodName { get; private set; }//Имя вызываемого метода
+        public IDictionary<string, object> Parametrs { get; private set; }//Параметры вызываемого метода
 
-        public string Pattern { get; private set; }
-        public int PatternLength { get; private set; }
-        public string[] PatternCollecton { get; private set; }
-        public string[] RequestCollection { get; private set; }
-        public string ControllerName { get; private set; }
-        public string MethodName { get; private set; }
-        public IDictionary<string, object> Parametrs { get; private set; }
+
 
         public RequestMap(string pattern, string[] request_collection)
         {
             Pattern = pattern;
-            PatternLength = Pattern.Length;
             Parametrs = new Dictionary<string, object>();
             PatternCollecton = Pattern.Replace("{", "").Replace("}", "").Split('/');
             RequestCollection = request_collection;
@@ -46,34 +45,42 @@ namespace Kontur.GameStats.Application.Core
 
         public bool ExecuteMapping(string reqstr)
         {
-
-            if (reqstr.Equals(String.Empty)) return false;
-
-            Regex RegEx = GetRegExFromPattern();
-            Match m = RegEx.Match(reqstr);
-            if (!m.Value.Equals(reqstr)) return false;
-
-            for (int i = 0; i < PatternCollecton.Length; i++)
+            try
             {
-                var obj = PatternCollecton[i].Split(':');
-                if (obj.Length >= 2)
+                if (reqstr.Equals(String.Empty)) return false;
+
+                Regex RegEx = GetRegExFromPattern();
+                Match m = RegEx.Match(reqstr);
+                if (!m.Value.Equals(reqstr)) return false;
+
+                //Парсинг запроса
+                for (int i = 0; i < PatternCollecton.Length; i++)
                 {
-                    if(obj[0] == "controller")
+                    var obj = PatternCollecton[i].Split(':');
+                    if (obj.Length >= 2)
                     {
-                        ControllerName = obj[1];
-                    }
-                    else if(obj[0] == "method")
-                    {
-                        MethodName = obj[1];
-                    }
-                    else
-                    {
-                        Parametrs.Add(obj[1], RequestCollection[i]);
+                        if (obj[0] == "controller")
+                        {
+                            ControllerName = obj[1];
+                        }
+                        else if (obj[0] == "method")
+                        {
+                            MethodName = obj[1];
+                        }
+                        else
+                        {
+                            Parametrs.Add(obj[1], RequestCollection[i]);
+                        }
                     }
                 }
-            }
 
                 return true;
+            }
+            catch(Exception e)
+            {
+                Logger.Log.WriteErrorLog(e);
+                return false;
+            }
         }
 
         private Regex GetRegExFromPattern()

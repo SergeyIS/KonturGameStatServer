@@ -27,7 +27,7 @@ namespace Kontur.GameStats.Application.Core
              Регистрация маршрутов. Маршрут представляет собой строку вида: 
              "{controller:name}/{param:name}/{method:name}". Здесь предполагается, что названия параметров будут соответствовать
              названию методов в контролленре. Контроллеры и методы, в свою очередь, 'помечаются' атрибутом [Name("name")].  
-             Такой маршрут сопоставляется с http запросом, при этом учитывается последовательность 
+             Такой маршрут сопоставляется с http запросом, при этом учитывается порядок 
              указания элементов {key:value}; 
              */
 
@@ -115,7 +115,7 @@ namespace Kontur.GameStats.Application.Core
             }
             catch(Exception e)
             {
-                context.Response.StatusCode = (int)HttpStatusCode.BadGateway;
+                context.Response.StatusCode = (int)HttpStatusCode.BadRequest;
                 Logger.Log.WriteErrorLog(e);
             }
             finally
@@ -172,7 +172,7 @@ namespace Kontur.GameStats.Application.Core
             }
             catch(Exception e)
             {
-
+                Logger.Log.WriteErrorLog(e);
             }
 
             return true;
@@ -196,6 +196,7 @@ namespace Kontur.GameStats.Application.Core
                         byte[] bytes = Encoding.UTF8.GetBytes(resp.ToString());
                         output.Write(bytes, 0, bytes.Length);
                     }
+                    return;
                 }
                 else
                 {
@@ -206,7 +207,7 @@ namespace Kontur.GameStats.Application.Core
             }
             catch(Exception ex)
             {
-                //Log.Write(ex);
+                Logger.Log.WriteErrorLog(ex);
                 context.Response.StatusCode = (int)HttpStatusCode.InternalServerError;
             }
             
@@ -216,12 +217,20 @@ namespace Kontur.GameStats.Application.Core
         /// </summary>
         private object ReadRequestBody()
         {
-            object data;
-            using (StreamReader reader = new StreamReader(context.Request.InputStream))
+            try
             {
-                data = reader.ReadToEnd();
+                object data;
+                using (StreamReader reader = new StreamReader(context.Request.InputStream))
+                {
+                    data = reader.ReadToEnd();
+                }
+                return data;
             }
-            return data;
+            catch(Exception e)
+            {
+                Logger.Log.WriteErrorLog(e);
+                return null;
+            }
         }
         public void Dispose()
         {

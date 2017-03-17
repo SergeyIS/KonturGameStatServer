@@ -18,9 +18,8 @@ namespace Kontur.GameStats.Application.Controllers
         public object Info()
         {
             var serversInfo = new List<ServersInfoModel>();
-            using(var dbmanager = new DataManager())
+            using (var dbmanager = new DataManager())
             {
-                dbmanager.OpenConnetion();
                 serversInfo = dbmanager.GetServersInfo();
             }
             return serversInfo;
@@ -31,11 +30,11 @@ namespace Kontur.GameStats.Application.Controllers
         public object Info(string endpoint)
         {
             ServerInfoModel serverInfo = new ServerInfoModel();
-            using(var dbmanager = new DataManager())
+            using (var dbmanager = new DataManager())
             {
                 serverInfo = dbmanager.GetServerInfo(endpoint);
                 if (dbmanager.StateOfCurrentOperation == OperationState.Failed)
-                    return HttpStatusCode.BadRequest;
+                    return HttpStatusCode.NotFound;
             }
             return serverInfo;
         }
@@ -46,7 +45,6 @@ namespace Kontur.GameStats.Application.Controllers
         {
             using (var dbmanager = new DataManager())
             {
-                dbmanager.OpenConnetion();
                 dbmanager.AddServer(endpoint, data.Name, data.GameModes);
             }
             return HttpStatusCode.OK;
@@ -57,9 +55,8 @@ namespace Kontur.GameStats.Application.Controllers
         [Name("matches")]
         public object Matches(string endpoint, DateTime timestamp)
         {
-            using(var dbmanager = new DataManager())
+            using (var dbmanager = new DataManager())
             {
-                dbmanager.OpenConnetion();
                 var matchinfo = dbmanager.GetMatchInfo(endpoint, timestamp);
                 if (dbmanager.StateOfCurrentOperation == OperationState.Failed)
                     return HttpStatusCode.NotFound;
@@ -71,22 +68,28 @@ namespace Kontur.GameStats.Application.Controllers
         [Name("matches")]
         public HttpStatusCode Matches(string endpoint, DateTime timestamp, ServerMatchesModel data)
         {
-            using(var dbmanager = new DataManager())
+            using (var dbmanager = new DataManager())
             {
-                dbmanager.OpenConnetion();
-                dbmanager.AddMatch(endpoint, timestamp, data);
-
-                if (dbmanager.StateOfCurrentOperation == OperationState.Failed)
+                if (!dbmanager.IsServerExist(endpoint))
                     return HttpStatusCode.BadRequest;
 
-                dbmanager.UpdateServersGlobalStats(endpoint);//Обновляет статистические данные о сервере из глобальной таблицы.
-                dbmanager.UpdatePlayersGlobalStats(endpoint, data);//Обновляет статистические данные об игроке из глобальной таблицы
+                Task.Run(() =>
+                {
+                    var addPlayersOperation = dbmanager.AddPlayersIfNotExist(data);
+                    addPlayersOperation.GetAwaiter().GetResult();
 
-                dbmanager.UpdateServerLocalStats(endpoint, data);//Обновляет статистические данные о сервере (режимы игры, карты)
-                dbmanager.UpdatePlayersLocalStats(endpoint, data);//Обновляет статистические данные об игроке (режим игры, сервер, итд)
+                    var addMatchOperation = dbmanager.AddMatch(endpoint, timestamp, data);
+                    addMatchOperation.GetAwaiter().GetResult();
+
+                    dbmanager.UpdateServersGlobalStats(endpoint);//Обновляет статистические данные о сервере из глобальной таблицы.
+                    dbmanager.UpdatePlayersGlobalStats(endpoint, data);//Обновляет статистические данные об игроке из глобальной таблицы
+
+                    dbmanager.UpdateServerLocalStats(endpoint, data);//Обновляет статистические данные о сервере (режимы игры, карты)
+                    dbmanager.UpdatePlayersLocalStats(endpoint, data);//Обновляет статистические данные об игроке (режим игры, сервер, итд)
+                });
 
                 return HttpStatusCode.OK;
-            }     
+            }
         }
 
         [Method(HttpMethods.GET)]
@@ -95,9 +98,8 @@ namespace Kontur.GameStats.Application.Controllers
         {
             var serverStats = new ServerStatsModel();
 
-            using(var dbmanager = new DataManager())
+            using (var dbmanager = new DataManager())
             {
-                dbmanager.OpenConnetion();
                 serverStats = dbmanager.GetServerStat(endpoint);
                 if (dbmanager.StateOfCurrentOperation == OperationState.Failed)
                     return HttpStatusCode.NotFound;
